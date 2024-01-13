@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.27.4)
+include(FetchContent)
 
 project(dreams)
 
@@ -17,22 +18,37 @@ file(GLOB_RECURSE sources src/*.cpp src/*.h)
 file(GLOB_RECURSE opt_sources opt/*.cpp opt/*.h)
 file(GLOB_RECURSE shaders shaders/*.vert shaders/*.frag)
 
-add_subdirectory(external/entt)
-add_subdirectory(external/VulkanMemoryAllocator)
-add_subdirectory(external/libspng)
+FetchContent_Declare(
+  entt
+  GIT_REPOSITORY https://github.com/skypjack/entt.git
+  GIT_TAG        v3.12.2
+)
+FetchContent_Declare(
+  libspng
+  GIT_REPOSITORY https://github.com/randy408/libspng.git
+  GIT_TAG        v0.7.4
+)
+FetchContent_Declare(
+  VulkanMemoryAllocator-Hpp
+  GIT_REPOSITORY https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git
+  GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(entt libspng VulkanMemoryAllocator-Hpp)
+
 target_compile_options(spng PRIVATE -O3)
 
 add_library(optimized_components STATIC ${opt_sources})
 target_include_directories(optimized_components PRIVATE include/)
-target_include_directories(optimized_components PRIVATE external/VulkanMemoryAllocator-Hpp/)
+target_link_libraries(optimized_components PRIVATE VulkanMemoryAllocator-Hpp)
 target_compile_options(optimized_components PRIVATE -O3)
 
 add_executable(dreams ${sources})
 
 target_include_directories(dreams PRIVATE include/)
 
-target_link_libraries(dreams PRIVATE ${Vulkan_LIBRARIES})
-target_link_libraries(dreams PRIVATE VulkanMemoryAllocator)
+target_link_libraries(dreams PRIVATE Vulkan::Vulkan)
+target_link_libraries(dreams PRIVATE VulkanMemoryAllocator-Hpp)
 target_link_libraries(dreams PRIVATE glfw)
 target_link_libraries(dreams PRIVATE spdlog::spdlog)
 target_link_libraries(dreams PRIVATE EnTT::EnTT)
@@ -43,8 +59,6 @@ target_link_libraries(dreams PRIVATE optimized_components)
 
 target_include_directories(dreams PRIVATE ${Vulkan_INCLUDE_DIRS})
 target_include_directories(dreams PRIVATE ${GLM_INCLUDE_DIRS})
-target_include_directories(dreams PRIVATE external/VulkanMemoryAllocator-Hpp/)
-target_include_directories(dreams PRIVATE external/libspng/spng)
 
 find_program(GLSLC glslc)
 find_program(GLSLang_Validator glslangValidator)

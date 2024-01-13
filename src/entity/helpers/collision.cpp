@@ -1,5 +1,6 @@
 #include "entity/helpers/collision.hpp"
 
+#include <algorithm>
 #include <array>
 #include <stdexcept>
 

@@ -6,7 +6,6 @@
 #include "utils.hpp"
 
 #include <chrono>
-#include <fstream>
 #include <spdlog/spdlog.h>
 
 #include <freetype2/ft2build.h>
@@ -23,7 +22,7 @@ namespace render::phases
 		FT_Library ft;
 		FT_Error err = FT_Init_FreeType(&ft);
 		font = std::make_unique<font_renderer>("/usr/share/fonts/liberation/LiberationSans-Regular.ttf", 128, device, allocator);
-		
+
 		pool = device.createCommandPoolUnique(vk::CommandPoolCreateInfo(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, graphicsFamily));
 
 		background = std::make_unique<texture>(device, allocator, 1920, 1080, vk::ImageUsageFlagBits::eSampled | vk::ImageUsageFlagBits::eTransferSrc);
@@ -34,8 +33,8 @@ namespace render::phases
 			vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 			vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR);
 		vk::AttachmentReference ref(0, vk::ImageLayout::eColorAttachmentOptimal);
-		vk::SubpassDependency dep(VK_SUBPASS_EXTERNAL, 0, 
-			vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, 
+		vk::SubpassDependency dep(VK_SUBPASS_EXTERNAL, 0,
+			vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput,
 			{}, vk::AccessFlagBits::eColorAttachmentWrite);
 		vk::SubpassDescription subpass({}, vk::PipelineBindPoint::eGraphics, {}, ref);
 		vk::RenderPassCreateInfo renderpass_info({}, attachment, subpass, dep);
@@ -74,7 +73,7 @@ namespace render::phases
 			std::array<vk::DynamicState, 2> dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
 			vk::PipelineDynamicStateCreateInfo dynamic({}, dynamicStates);
 
-			vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input, 
+			vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input,
 				&input_assembly, &tesselation, &viewport, &rasterization, &multisample, &depthStencil, &colorBlend, &dynamic, pipelineLayout.get(), renderPass.get());
 			pipeline = device.createGraphicsPipelineUnique({}, pipeline_info).value;
 			debugName(device, pipeline.get(), "Loading Screen Pipeline");
@@ -130,7 +129,7 @@ namespace render::phases
 		commandBuffer->begin(vk::CommandBufferBeginInfo());
 
 		vk::ClearValue color(std::array<float, 4>{partialSeconds.count(), 0.5f, 0.0f, 1.0f});
-		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(renderPass.get(), framebuffers[frame].get(), 
+		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(renderPass.get(), framebuffers[frame].get(),
 			vk::Rect2D({0, 0}, win->swapchainExtent), color), vk::SubpassContents::eInline);
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline.get());
 
@@ -147,7 +146,7 @@ namespace render::phases
 		font->renderText(commandBuffer.get(), frame, "MOIN MOIN", 1, 0, 0.1f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 		font->renderText(commandBuffer.get(), frame, std::to_string(donePoints)+"/"+std::to_string(totalPoints), 0, 0.1, 0.1f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 		font->finish(frame);
-		
+
 		commandBuffer->endRenderPass();
 		commandBuffer->end();
 

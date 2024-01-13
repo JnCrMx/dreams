@@ -46,15 +46,15 @@ namespace render::phases
 			allocator.destroyBuffer(modelUniformBuffers[i], modelUniformAllocations[i]);
 		}
 	}
-	
+
 	void render_test::preload()
 	{
 		pool = device.createCommandPoolUnique(vk::CommandPoolCreateInfo(vk::CommandPoolCreateFlagBits::eResetCommandBuffer, graphicsFamily));
 
 		{
-			vk::AttachmentDescription shadowAttachment({}, vk::Format::eD32Sfloat, vk::SampleCountFlagBits::e1, 
+			vk::AttachmentDescription shadowAttachment({}, vk::Format::eD32Sfloat, vk::SampleCountFlagBits::e1,
 				vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
-				vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+				vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 				vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal);
 			vk::AttachmentReference ref(0, vk::ImageLayout::eDepthStencilAttachmentOptimal);
 			vk::SubpassDescription subpass({}, vk::PipelineBindPoint::eGraphics, 0, {}, 0, {}, 0, &ref, 0, {});
@@ -71,25 +71,25 @@ namespace render::phases
 		{
 			std::array<vk::AttachmentDescription, 5> attachments = {
 		/*0*/	vk::AttachmentDescription({}, vk::Format::eR8G8B8A8Srgb, CONFIG.sampleCount, // color
-					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eUndefined, vk::ImageLayout::eGeneral),
 		/*1*/	vk::AttachmentDescription({}, vk::Format::eR32G32B32A32Sfloat, CONFIG.sampleCount, // shade
-					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eUndefined, vk::ImageLayout::eGeneral),
 		/*2*/	vk::AttachmentDescription({}, vk::Format::eD32Sfloat, CONFIG.sampleCount, // depth
-					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eUndefined, vk::ImageLayout::eGeneral),
 
 		/*3*/	vk::AttachmentDescription({}, vk::Format::eR8G8B8A8Srgb, vk::SampleCountFlagBits::e1, // color revolve
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal),
 		/*4*/	vk::AttachmentDescription({}, vk::Format::eR32G32B32A32Sfloat, vk::SampleCountFlagBits::e1, // shade revolve
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eStore,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eUndefined, vk::ImageLayout::eShaderReadOnlyOptimal),
 			};
 
@@ -108,9 +108,9 @@ namespace render::phases
 			vk::SubpassDescription subpass({}, vk::PipelineBindPoint::eGraphics, {}, pass1Refs, pass1Revolve, &depthRef, {});
 
 			std::array<vk::SubpassDependency, 2> dependencies = {
-				vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, 
-					vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests, 
-					vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests, 
+				vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0,
+					vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests,
+					vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests,
 					{}, vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eDepthStencilAttachmentWrite),
 				vk::SubpassDependency(0, VK_SUBPASS_EXTERNAL,
 					vk::PipelineStageFlagBits::eColorAttachmentOutput | vk::PipelineStageFlagBits::eEarlyFragmentTests,
@@ -125,16 +125,16 @@ namespace render::phases
 		{
 			std::array<vk::AttachmentDescription, 3> attachments = {
 		/*0*/	vk::AttachmentDescription({}, vk::Format::eR8G8B8A8Srgb, vk::SampleCountFlagBits::e1, // color
-					vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eDontCare, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eDontCare,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eShaderReadOnlyOptimal, vk::ImageLayout::eGeneral),
 		/*1*/	vk::AttachmentDescription({}, vk::Format::eR32G32B32A32Sfloat, vk::SampleCountFlagBits::e1, // shade
-					vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eDontCare, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eDontCare,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eShaderReadOnlyOptimal, vk::ImageLayout::eGeneral),
 		/*2*/	vk::AttachmentDescription({}, win->swapchainFormat.format, vk::SampleCountFlagBits::e1, // final
-					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore, 
-					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare, 
+					vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+					vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 					vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR)
 			};
 			vk::AttachmentReference colorReadRef(0, vk::ImageLayout::eShaderReadOnlyOptimal);
@@ -145,9 +145,9 @@ namespace render::phases
 			vk::SubpassDescription subpass({}, vk::PipelineBindPoint::eGraphics, pass1In, finalWriteRef, {}, nullptr, {});
 
 			std::array<vk::SubpassDependency, 2> dependencies = {
-				vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0, 
-					vk::PipelineStageFlagBits::eColorAttachmentOutput, 
-					vk::PipelineStageFlagBits::eColorAttachmentOutput, 
+				vk::SubpassDependency(VK_SUBPASS_EXTERNAL, 0,
+					vk::PipelineStageFlagBits::eColorAttachmentOutput,
+					vk::PipelineStageFlagBits::eColorAttachmentOutput,
 					{}, vk::AccessFlagBits::eColorAttachmentWrite),
 				vk::SubpassDependency(0, VK_SUBPASS_EXTERNAL,
 					vk::PipelineStageFlagBits::eColorAttachmentOutput,
@@ -165,8 +165,8 @@ namespace render::phases
 				vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
 				vk::ImageLayout::ePresentSrcKHR, vk::ImageLayout::ePresentSrcKHR);
 			vk::AttachmentReference ref(0, vk::ImageLayout::eColorAttachmentOptimal);
-			vk::SubpassDependency dep(VK_SUBPASS_EXTERNAL, 0, 
-				vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput, 
+			vk::SubpassDependency dep(VK_SUBPASS_EXTERNAL, 0,
+				vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput,
 				vk::AccessFlagBits::eColorAttachmentWrite, vk::AccessFlagBits::eColorAttachmentWrite | vk::AccessFlagBits::eColorAttachmentRead);
 			vk::SubpassDescription subpass({}, vk::PipelineBindPoint::eGraphics, {}, ref);
 			vk::RenderPassCreateInfo renderpass_info({}, attachment, subpass, dep);
@@ -235,7 +235,7 @@ namespace render::phases
 			vk::PipelineViewportStateCreateInfo viewport({}, v, s);
 
 			vk::PipelineRasterizationStateCreateInfo rasterization({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eBack, vk::FrontFace::eCounterClockwise, false, 0.0f, 0.0f, 0.0f, 1.0f);
-			
+
 			std::array<vk::DynamicState, 2> dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
 			vk::PipelineDynamicStateCreateInfo dynamic({}, dynamicStates);
 
@@ -259,8 +259,8 @@ namespace render::phases
 				};
 				vk::PipelineColorBlendStateCreateInfo colorBlend({}, false, vk::LogicOp::eClear, attachments);
 				vk::PipelineMultisampleStateCreateInfo multisample({}, CONFIG.sampleCount);
-				
-				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input, 
+
+				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input,
 					&input_assembly, &tesselation, &viewport, &rasterization, &multisample, &depthStencil, &colorBlend, &dynamic, mainPipelineLayout.get(), mainRenderPass.get(), 0);
 				mainPipeline = device.createGraphicsPipelineUnique({}, pipeline_info).value;
 				debugName(device, mainPipeline.get(), "Render Test Main Pipeline");
@@ -285,8 +285,8 @@ namespace render::phases
 				};
 				vk::PipelineColorBlendStateCreateInfo colorBlend({}, false, vk::LogicOp::eClear, attachments);
 				vk::PipelineMultisampleStateCreateInfo multisample({}, CONFIG.sampleCount);
-				
-				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input, 
+
+				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input,
 					&input_assembly, &tesselation, &viewport, &rasterization, &multisample, &depthStencil, &colorBlend, &dynamic, mainPipelineLayout.get(), mainRenderPass.get(), 0);
 				hitboxPipeline = device.createGraphicsPipelineUnique({}, pipeline_info).value;
 				debugName(device, hitboxPipeline.get(), "Render Test Hitbox Pipeline");
@@ -302,14 +302,14 @@ namespace render::phases
 					vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vertexShader.get(), "main"),
 					vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, fragmentShader.get(), "main")
 				};
-				
+
 				vk::PipelineRasterizationStateCreateInfo rasterization({}, false, false, vk::PolygonMode::eFill, vk::CullModeFlagBits::eFront, vk::FrontFace::eCounterClockwise, false, 0.0f, 0.0f, 0.0f, 1.0f);
 				vk::PipelineMultisampleStateCreateInfo multisample({}, vk::SampleCountFlagBits::e1);
 				vk::PipelineDepthStencilStateCreateInfo depthStencil({}, true, true, vk::CompareOp::eLess, false, false);
 
 				vk::PipelineColorBlendStateCreateInfo colorBlend({}, false, vk::LogicOp::eClear, {});
-				
-				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input, 
+
+				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input,
 					&input_assembly, &tesselation, &viewport, &rasterization, &multisample, &depthStencil, &colorBlend, &dynamic, mainPipelineLayout.get(), shadowRenderPass.get(), 0);
 				shadowPipeline = device.createGraphicsPipelineUnique({}, pipeline_info).value;
 				debugName(device, shadowPipeline.get(), "Render Test Shadow Pipeline");
@@ -323,7 +323,7 @@ namespace render::phases
 					vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eVertex, vertexShader.get(), "main"),
 					vk::PipelineShaderStageCreateInfo({}, vk::ShaderStageFlagBits::eFragment, fragmentShader.get(), "main")
 				};
-				
+
 				vk::PipelineDepthStencilStateCreateInfo depthStencil({}, false, false);
 
 				vk::PipelineColorBlendAttachmentState attachment(true, vk::BlendFactor::eOne, vk::BlendFactor::eOne, vk::BlendOp::eAdd);
@@ -331,23 +331,23 @@ namespace render::phases
 				vk::PipelineColorBlendStateCreateInfo colorBlend({}, false, vk::LogicOp::eClear, attachment);
 				vk::PipelineMultisampleStateCreateInfo multisample({}, vk::SampleCountFlagBits::e1);
 
-				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input, 
+				vk::GraphicsPipelineCreateInfo pipeline_info({}, shaders, &vertex_input,
 					&input_assembly, &tesselation, &viewport, &rasterization, &multisample, &depthStencil, &colorBlend, &dynamic, shadePipelineLayout.get(), shadeRenderPass.get(), 0);
 				shadePipeline = device.createGraphicsPipelineUnique({}, pipeline_info).value;
 				debugName(device, shadePipeline.get(), "Render Test Shading Pipeline");
 			}
 		}
 		shadowSampler = device.createSamplerUnique(vk::SamplerCreateInfo(
-			{}, vk::Filter::eLinear, vk::Filter::eLinear, 
-			vk::SamplerMipmapMode::eNearest, 
-			vk::SamplerAddressMode::eClampToBorder, vk::SamplerAddressMode::eClampToBorder, vk::SamplerAddressMode::eClampToBorder, 
+			{}, vk::Filter::eLinear, vk::Filter::eLinear,
+			vk::SamplerMipmapMode::eNearest,
+			vk::SamplerAddressMode::eClampToBorder, vk::SamplerAddressMode::eClampToBorder, vk::SamplerAddressMode::eClampToBorder,
 			{}, false, {}, false, vk::CompareOp::eNever, 0, 0, vk::BorderColor::eFloatOpaqueWhite));
 		textureSampler = device.createSamplerUnique(vk::SamplerCreateInfo(
-			{}, vk::Filter::eLinear, vk::Filter::eLinear, 
-			vk::SamplerMipmapMode::eNearest, 
-			vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat, 
+			{}, vk::Filter::eLinear, vk::Filter::eLinear,
+			vk::SamplerMipmapMode::eNearest,
+			vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat, vk::SamplerAddressMode::eRepeat,
 			{}, false, {}, false, vk::CompareOp::eNever, 0, 0, vk::BorderColor::eFloatOpaqueWhite));
-		
+
 		{
 			vk::DescriptorPoolSize size(vk::DescriptorType::eCombinedImageSampler, load_textures.size());
 			vk::DescriptorPoolCreateInfo pool_info({}, load_textures.size(), size);
@@ -386,7 +386,7 @@ namespace render::phases
 
 		FT_Library ft;
 		FT_Error err = FT_Init_FreeType(&ft);
-		font = std::make_unique<font_renderer>("/usr/share/fonts/liberation/LiberationSans-Regular.ttf", 128, device, allocator);
+		font = std::make_unique<font_renderer>("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf", 128, device, allocator);
 		font->preload(ft, loader, overlayPass.get());
 		loadingFutures.push_back(font->textureReady);
 	}
@@ -448,12 +448,12 @@ namespace render::phases
 				vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eInputAttachment, vk::Format::eR32G32B32A32Sfloat, CONFIG.sampleCount));
 			depthBuffers.push_back(std::make_unique<texture>(device, allocator, win->swapchainExtent.width, win->swapchainExtent.height,
 				vk::ImageUsageFlagBits::eDepthStencilAttachment, vk::Format::eD32Sfloat, CONFIG.sampleCount, false, vk::ImageAspectFlagBits::eDepth));
-			
+
 			colorRevolveBuffers.push_back(std::make_unique<texture>(device, allocator, win->swapchainExtent.width, win->swapchainExtent.height,
 				vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eInputAttachment, vk::Format::eR8G8B8A8Srgb, vk::SampleCountFlagBits::e1, false));
 			shadeRevolveBuffers.push_back(std::make_unique<texture>(device, allocator, win->swapchainExtent.width, win->swapchainExtent.height,
 				vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransientAttachment | vk::ImageUsageFlagBits::eInputAttachment, vk::Format::eR32G32B32A32Sfloat, vk::SampleCountFlagBits::e1, false));
-			
+
 			{
 				colorBuffers.back()->name("Render Test Color #"+std::to_string(i));
 				shadeBuffers.back()->name("Render Test Shade #"+std::to_string(i));
@@ -468,7 +468,7 @@ namespace render::phases
 					vk::ImageUsageFlagBits::eDepthStencilAttachment | vk::ImageUsageFlagBits::eSampled, vk::Format::eD32Sfloat, vk::SampleCountFlagBits::e1, false, vk::ImageAspectFlagBits::eDepth));
 				shadowBuffers[i].back()->name("Render Test Light Depth #"+std::to_string(i)+":"+std::to_string(j));
 			}
-			
+
 			{
 				std::array<vk::ImageView, 5> imageViews = {
 					colorBuffers.back()->imageView.get(),
@@ -551,7 +551,7 @@ namespace render::phases
 
 			imageInfos.push_back(vk::DescriptorImageInfo({}, colorRevolveBuffers.back()->imageView.get(), vk::ImageLayout::eShaderReadOnlyOptimal));
 			imageInfos.push_back(vk::DescriptorImageInfo({}, shadeRevolveBuffers.back()->imageView.get(), vk::ImageLayout::eShaderReadOnlyOptimal));
-			
+
 			writes.push_back(vk::WriteDescriptorSet(shadeDescriptorSets[i], 0, 0, 2, vk::DescriptorType::eInputAttachment, imageInfos.data()+(2+maxLights)*i));
 
 			bufferInfos.push_back(vk::DescriptorBufferInfo(lightUniformBuffers[i], 0, sizeof(LightInfo)));
@@ -572,11 +572,11 @@ namespace render::phases
 
 			bufferInfos.push_back(vk::DescriptorBufferInfo(globalShadowUniformBuffers[i], 0, sizeof(GlobalInfo)));
 			writes.push_back(vk::WriteDescriptorSet(shadowDescriptorSets[i], 0, 0, vk::DescriptorType::eUniformBufferDynamic, {},  bufferInfos.back()));
-			
+
 			bufferInfos.push_back(vk::DescriptorBufferInfo(modelUniformBuffers[i], 0, sizeof(ModelInfo)));
 			writes.push_back(vk::WriteDescriptorSet(shadowDescriptorSets[i], 1, 0, vk::DescriptorType::eUniformBufferDynamic, {},  bufferInfos.back()));
 		}
-		
+
 		device.updateDescriptorSets(writes, {});
 
 		font->prepare(imageCount);
@@ -584,7 +584,7 @@ namespace render::phases
 
 	void render_test::init()
 	{
-		
+
 	}
 
 	void render_test::set_camera(entity::entity_id entity)
@@ -596,8 +596,8 @@ namespace render::phases
 	{
 		vk::UniqueCommandBuffer& commandBuffer = commandBuffers[frame];
 		commandBuffer->begin(vk::CommandBufferBeginInfo());
-		vk::DebugUtilsLabelEXT label{};	
-		
+		vk::DebugUtilsLabelEXT label{};
+
 		std::map<entity::entity_id, int> entityDescriptors;
 		{
 			int j=0;
@@ -634,7 +634,7 @@ namespace render::phases
 			lightDescriptors[entity] = l;
 
 			vk::ClearValue depthClear = vk::ClearDepthStencilValue(1.0f, 0);
-			commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(shadowRenderPass.get(), shadowFramebuffers[frame][l].get(), 
+			commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(shadowRenderPass.get(), shadowFramebuffers[frame][l].get(),
 				vk::Rect2D({0, 0}, {CONFIG.shadowResolution, CONFIG.shadowResolution}), depthClear), vk::SubpassContents::eInline);
 
 			//globalShadowUniformPointers[frame]->projection = glm::perspective(light.fov, 1.0f, light.zNear, light.zFar);
@@ -652,9 +652,9 @@ namespace render::phases
 				auto& model = models[m2.model_name];
 				commandBuffer->bindVertexBuffers(0, model->vertexBuffer, {0L});
 				commandBuffer->bindIndexBuffer(model->indexBuffer, 0, vk::IndexType::eUint32);
-		
+
 				int q = entityDescriptors[e2];
-				commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mainPipelineLayout.get(), 0, shadowDescriptorSets[frame], 
+				commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mainPipelineLayout.get(), 0, shadowDescriptorSets[frame],
 					{(uint32_t)(l*sizeof(GlobalInfo)), (uint32_t)(q*sizeof(ModelInfo))});
 				commandBuffer->drawIndexed(model->indexCount, 1, 0, 0, 0);
 
@@ -684,7 +684,7 @@ namespace render::phases
 			commandBuffer->setScissor(0, scissor);
 		}
 		commandBuffer->beginDebugUtilsLabelEXT(label.setPLabelName("Main Render"));
-		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(mainRenderPass.get(), mainFramebuffers[frame].get(), 
+		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(mainRenderPass.get(), mainFramebuffers[frame].get(),
 			vk::Rect2D({0, 0}, win->swapchainExtent), mainClear), vk::SubpassContents::eInline);
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, mainPipeline.get());
 
@@ -692,14 +692,14 @@ namespace render::phases
 		entity::components::position camTarget = entities.get<entity::components::position>(cam.target);
 		globalUniformPointers[frame]->projection = glm::perspective(cam.fov,
 			win->swapchainExtent.width / (float) win->swapchainExtent.height, cam.zNear, cam.zFar);
-		globalUniformPointers[frame]->view = 
+		globalUniformPointers[frame]->view =
 			glm::scale(glm::mat4(1.0), glm::vec3(1.0, -1.0, 1.0)) *
 			glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, -cam.distance)) *
 			glm::rotate(glm::mat4(1.0), cam.pitch, glm::vec3(1.0, 0.0, 0.0)) *
 			glm::rotate(glm::mat4(1.0), cam.yaw, glm::vec3(0.0, 1.0, 0.0)) *
 			glm::translate(glm::mat4(1.0), -(glm::vec3)camTarget - cam.offset) *
 			glm::mat4(1.0);
-		
+
 		for(auto [e2, p2, m2] : modelView.each())
 		{
 			auto& model = models[m2.model_name];
@@ -708,8 +708,8 @@ namespace render::phases
 
 			commandBuffer->bindVertexBuffers(0, model->vertexBuffer, {0L});
 			commandBuffer->bindIndexBuffer(model->indexBuffer, 0, vk::IndexType::eUint32);
-		
-			commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mainPipelineLayout.get(), 0, mainDescriptorSets[frame], 
+
+			commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mainPipelineLayout.get(), 0, mainDescriptorSets[frame],
 				{0U, (uint32_t)(q*sizeof(ModelInfo))});
 			commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mainPipelineLayout.get(), 1, textureSet, {});
 			commandBuffer->drawIndexed(model->indexCount, 1, 0, 0, 0);
@@ -745,22 +745,22 @@ namespace render::phases
 			}
 			modelUniformPointers[frame][q].min = glm::vec4(c2.min, 0.0);
 			modelUniformPointers[frame][q].max = glm::vec4(c2.max, 0.0);
-		
-			commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mainPipelineLayout.get(), 0, mainDescriptorSets[frame], 
+
+			commandBuffer->bindDescriptorSets(vk::PipelineBindPoint::eGraphics, mainPipelineLayout.get(), 0, mainDescriptorSets[frame],
 				{0U, (uint32_t)(q*sizeof(ModelInfo))});
 			commandBuffer->draw(24, 1, 0, 0);
 		}
 
 		commandBuffer->endRenderPass();
 		commandBuffer->endDebugUtilsLabelEXT();
-		
+
 		commandBuffer->beginDebugUtilsLabelEXT(label.setPLabelName("Shading"));
 		std::array<vk::ClearValue, 3> shadeClear = {
 			vk::ClearColorValue(std::array<float, 4>{0.0f, 0.0f, 0.0f, 0.0f}),
 			vk::ClearColorValue(std::array<float, 4>{0.0f, 0.0f, 0.0f, 0.0f}),
 			vk::ClearColorValue(std::array<float, 4>{0.0f, 0.0f, 0.0f, 0.0f})
 		};
-		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(shadeRenderPass.get(), shadeFramebuffers[frame].get(), 
+		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(shadeRenderPass.get(), shadeFramebuffers[frame].get(),
 			vk::Rect2D({0, 0}, win->swapchainExtent), shadeClear), vk::SubpassContents::eInline);
 		commandBuffer->bindPipeline(vk::PipelineBindPoint::eGraphics, shadePipeline.get());
 		for(auto [entity, position, light] : lightView.each())
@@ -780,10 +780,10 @@ namespace render::phases
 		commandBuffer->endDebugUtilsLabelEXT();
 
 		commandBuffer->beginDebugUtilsLabelEXT(label.setPLabelName("Overlay Render"));
-		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(overlayPass.get(), overlayFramebuffers[frame].get(), 
+		commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(overlayPass.get(), overlayFramebuffers[frame].get(),
 			vk::Rect2D({0, 0}, win->swapchainExtent), {}), vk::SubpassContents::eInline);
 
-		auto budget = allocator.getBudget();
+		auto budget = allocator.getHeapBudgets().front();
 		auto usage = ((double)budget.usage) / ((double)budget.budget);
 
 		font->renderText(commandBuffer.get(), frame, "FPS: "+utils::to_fixed_string<1>(win->currentFPS), 0.05f, 0.05f + 0*0.05f, 0.05f);
