@@ -3,6 +3,7 @@
 
 #include <entt/entt.hpp>
 
+#include "render/gui_render_context.hpp"
 #include "render/window.hpp"
 #include "render/phases/render_test.hpp"
 
@@ -43,7 +44,7 @@ int main(int argc, char *argv[])
     registry.emplace<entity::components::position>(soraka, 0.0, 0.0, 0.0);
     registry.emplace<entity::components::rotation>(soraka);
     registry.emplace<entity::components::velocity>(soraka);
-    registry.emplace<entity::components::collision>(soraka);
+    //registry.emplace<entity::components::collision>(soraka);
     registry.emplace<entity::components::player>(soraka);
     registry.emplace<entity::components::model>(soraka, "soraka.obj"_hs, "soraka.png"_hs);
 
@@ -69,8 +70,11 @@ int main(int argc, char *argv[])
 
     render::phases::render_test* renderer;
     entity::world_ticker* ticker;
+    auto gui = [](render::gui_render_context& ctx){
+        ctx.draw_text("Hello world!", 0.0, 0.0, 0.05f, glm::vec4(1.0, 1.0, 1.0, 1.0));
+    };
 
-    window.set_phase(renderer = new render::phases::render_test(&window, registry), ticker = new entity::world_ticker(registry, soraka, camera));
+    window.set_phase(renderer = new render::phases::render_test(&window, registry, gui), ticker = new entity::world_ticker(registry, soraka, camera));
     renderer->set_camera(camera);
 
     window.loop();

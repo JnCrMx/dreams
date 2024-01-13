@@ -29,7 +29,7 @@ namespace render
 
             void preload(FT_Library ft, resource_loader* loader, vk::RenderPass renderPass);
             void prepare(int imageCount);
-            void renderText(vk::CommandBuffer cmd, int frame, std::string text, float x, float y, float scale = 1.0f, glm::vec4 color = glm::vec4(1.0, 1.0, 1.0, 1.0));
+            void renderText(vk::CommandBuffer cmd, int frame, std::string_view text, float x, float y, float scale = 1.0f, glm::vec4 color = glm::vec4(1.0, 1.0, 1.0, 1.0));
             void finish(int frame);
 
             std::unique_ptr<texture> fontTexture;

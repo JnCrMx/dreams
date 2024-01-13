@@ -1,4 +1,6 @@
 #include "render/phases/render_test.hpp"
+
+#include "render/gui_render_context.hpp"
 #include "render/window.hpp"
 #include "render/utils.hpp"
 #include "render/debug.hpp"
@@ -16,7 +18,7 @@ using namespace config;
 
 namespace render::phases
 {
-    render_test::render_test(window* window, entt::registry& entities) : phase(window), entities(entities)
+    render_test::render_test(window* window, entt::registry& entities, std::function<void(gui_render_context&)> guiRenderCallback) : phase(window), entities(entities), guiRenderCallback(guiRenderCallback)
     {
         lightView = entities.view<const entity::components::position, const entity::components::light>();
         modelView = entities.view<const entity::components::position, const entity::components::model>();
@@ -782,6 +784,11 @@ namespace render::phases
         commandBuffer->beginDebugUtilsLabelEXT(label.setPLabelName("Overlay Render"));
         commandBuffer->beginRenderPass(vk::RenderPassBeginInfo(overlayPass.get(), overlayFramebuffers[frame].get(),
             vk::Rect2D({0, 0}, win->swapchainExtent), {}), vk::SubpassContents::eInline);
+
+        gui_render_context ctx(commandBuffer.get(), frame, font.get());
+        if(guiRenderCallback) {
+            guiRenderCallback(ctx);
+        }
 
         auto budget = allocator.getHeapBudgets().front();
         auto usage = ((double)budget.usage) / ((double)budget.budget);

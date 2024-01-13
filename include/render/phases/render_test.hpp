@@ -1,5 +1,6 @@
 #pragma once
 
+#include "render/gui_render_context.hpp"
 #include "render/phase.hpp"
 #include "render/texture.hpp"
 #include "render/model.hpp"
@@ -12,6 +13,8 @@
 #include "entity/components/collision.hpp"
 
 #include <entt/entt.hpp>
+#include <memory>
+
 using namespace entt::literals;
 
 namespace render::phases
@@ -26,7 +29,7 @@ namespace render::phases
         };
 
         public:
-            render_test(window* window, entt::registry& entities);
+            render_test(window* window, entt::registry& entities, std::function<void(gui_render_context&)> guiRenderCallback = {});
             ~render_test();
 
             void preload() override;
@@ -140,6 +143,7 @@ namespace render::phases
                 const entity::components::position,
                 const entity::components::model,
                 entity::components::collision>()) hitboxView;
+            std::function<void(gui_render_context&)> guiRenderCallback;
 
             static constexpr int maxLights = 8;
             static constexpr int maxObjects = 2048;
