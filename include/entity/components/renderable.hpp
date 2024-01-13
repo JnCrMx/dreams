@@ -2,9 +2,9 @@
 
 namespace entity::components
 {
-	struct renderable
-	{
-		bool shadowCaster = true;
-		bool shadowCatcher = true;
-	};
+    struct renderable
+    {
+        bool shadowCaster = true;
+        bool shadowCatcher = true;
+    };
 }

@@ -20,52 +20,52 @@
 
 namespace render
 {
-	enum LoadType
-	{
-		Texture,
-		Image,
-		Buffer,
-		Model
-	};
+    enum LoadType
+    {
+        Texture,
+        Image,
+        Buffer,
+        Model
+    };
 
-	using LoaderFunction = std::function<void(uint8_t*, size_t)>;
-	struct LoadTask
-	{
-		LoadType type;
-		std::variant<std::string, LoaderFunction> src;
-		std::variant<texture*, model*, vk::Image, vk::Buffer> dst;
-		std::promise<void> promise;
-	};
+    using LoaderFunction = std::function<void(uint8_t*, size_t)>;
+    struct LoadTask
+    {
+        LoadType type;
+        std::variant<std::string, LoaderFunction> src;
+        std::variant<texture*, model*, vk::Image, vk::Buffer> dst;
+        std::promise<void> promise;
+    };
 
-	class resource_loader
-	{
-		public:
-			resource_loader(vk::Device device, vma::Allocator allocator,
-				uint32_t transferFamily, uint32_t graphicsFamily,
-				std::vector<vk::Queue> queues);
-			~resource_loader();
+    class resource_loader
+    {
+        public:
+            resource_loader(vk::Device device, vma::Allocator allocator,
+                uint32_t transferFamily, uint32_t graphicsFamily,
+                std::vector<vk::Queue> queues);
+            ~resource_loader();
 
-			std::future<void> loadTexture(texture* texture, std::string filename);
-			std::future<void> loadTexture(texture* texture, LoaderFunction loader);
+            std::future<void> loadTexture(texture* texture, std::string filename);
+            std::future<void> loadTexture(texture* texture, LoaderFunction loader);
 
-			std::future<void> loadModel(model* model, std::string filename);
+            std::future<void> loadModel(model* model, std::string filename);
 
-			static vk::Extent2D getImageSize(std::string filename);
-		private:
-			vk::Device device;
-			vma::Allocator allocator;
+            static vk::Extent2D getImageSize(std::string filename);
+        private:
+            vk::Device device;
+            vma::Allocator allocator;
 
-			uint32_t transferFamily;
-			uint32_t graphicsFamily;
+            uint32_t transferFamily;
+            uint32_t graphicsFamily;
 
-			std::mutex lock;
-			std::vector<std::thread> threads;
-			std::queue<LoadTask> tasks;
-			std::condition_variable cv;
-			bool quit = false;
+            std::mutex lock;
+            std::vector<std::thread> threads;
+            std::queue<LoadTask> tasks;
+            std::condition_variable cv;
+            bool quit = false;
 
-			void loadThread(int index, vk::Queue queue);
+            void loadThread(int index, vk::Queue queue);
 
-			constexpr static vk::DeviceSize stagingSize = 16*1024*1024;
-	};
+            constexpr static vk::DeviceSize stagingSize = 16*1024*1024;
+    };
 }

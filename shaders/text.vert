@@ -12,10 +12,10 @@ layout(location = 3) out vec4 outColor;
 
 void main()
 {
-	outPosition = inPosition;
-	outTexCoord = inTexCoord;
-	outSize = inSize;
-	outColor = inColor;
+    outPosition = inPosition;
+    outTexCoord = inTexCoord;
+    outSize = inSize;
+    outColor = inColor;
 
-	gl_Position = vec4(outPosition, 0.0, 1.0);
+    gl_Position = vec4(outPosition, 0.0, 1.0);
 }

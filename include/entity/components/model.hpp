@@ -5,9 +5,9 @@
 
 namespace entity::components
 {
-	struct model
-	{
-		entt::hashed_string::hash_type model_name;
-		entt::hashed_string::hash_type texture_name;
-	};
+    struct model
+    {
+        entt::hashed_string::hash_type model_name;
+        entt::hashed_string::hash_type texture_name;
+    };
 }

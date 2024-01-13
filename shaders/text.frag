@@ -2,9 +2,9 @@
 
 layout(binding = 0, std140) uniform UBO
 {
-	vec2 position;
-	vec2 textureSize;
-	float scale;
+    vec2 position;
+    vec2 textureSize;
+    float scale;
 } uni;
 layout(binding = 1) uniform sampler2D tex;
 
@@ -15,6 +15,6 @@ layout(location = 0) out vec4 outColor;
 
 void main()
 {
-	vec4 c = texture(tex, inTexCoord/uni.textureSize);
-	outColor = inColor*c;
+    vec4 c = texture(tex, inTexCoord/uni.textureSize);
+    outColor = inColor*c;
 }

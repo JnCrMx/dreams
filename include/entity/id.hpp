@@ -4,5 +4,5 @@
 
 namespace entity
 {
-	using entity_id = entt::entity;
+    using entity_id = entt::entity;
 }

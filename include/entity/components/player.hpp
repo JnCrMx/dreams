@@ -2,11 +2,11 @@
 
 namespace entity::components
 {
-	struct player
-	{
-		double walkingSpeed = 2.0;
+    struct player
+    {
+        double walkingSpeed = 2.0;
 
-		double motionForward;
-		double motionSideward;
-	};
+        double motionForward;
+        double motionSideward;
+    };
 }

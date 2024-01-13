@@ -13,8 +13,8 @@ layout(set = 1, binding = 0) uniform sampler2D albedoTexture;
 
 void main()
 {
-	vec3 normal = normalize(inNormal);
+    vec3 normal = normalize(inNormal);
 
-	outColor = texture(albedoTexture, inTexCoord);
-	outShade = vec4(normal, inPosition.z/inPosition.w);
+    outColor = texture(albedoTexture, inTexCoord);
+    outShade = vec4(normal, inPosition.z/inPosition.w);
 }

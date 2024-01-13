@@ -6,14 +6,14 @@
 
 namespace entity::components
 {
-	struct rotation
-	{
-		double yaw;
-		double pitch;
+    struct rotation
+    {
+        double yaw;
+        double pitch;
 
-		glm::mat4 matrix()
-		{
-			return glm::rotate(glm::mat4(1.0), (float)yaw, glm::vec3(0.0, 1.0, 0.0));
-		}
-	};
+        glm::mat4 matrix()
+        {
+            return glm::rotate(glm::mat4(1.0), (float)yaw, glm::vec3(0.0, 1.0, 0.0));
+        }
+    };
 }

@@ -17,91 +17,91 @@
 
 namespace render
 {
-	struct QueueFamilyIndices {
-    	std::optional<uint32_t> graphicsFamily;
-		std::optional<uint32_t> presentFamily;
-		std::optional<uint32_t> transferFamily;
+    struct QueueFamilyIndices {
+        std::optional<uint32_t> graphicsFamily;
+        std::optional<uint32_t> presentFamily;
+        std::optional<uint32_t> transferFamily;
 
-		bool isComplete()
-		{
-			return graphicsFamily.has_value() && presentFamily.has_value();
-		}
-	};
+        bool isComplete()
+        {
+            return graphicsFamily.has_value() && presentFamily.has_value();
+        }
+    };
 
-	struct SwapChainSupportDetails {
-		vk::SurfaceCapabilitiesKHR capabilities;
-		std::vector<vk::SurfaceFormatKHR> formats;
-		std::vector<vk::PresentModeKHR> presentModes;
-	};
+    struct SwapChainSupportDetails {
+        vk::SurfaceCapabilitiesKHR capabilities;
+        std::vector<vk::SurfaceFormatKHR> formats;
+        std::vector<vk::PresentModeKHR> presentModes;
+    };
 
-	class window
-	{
-		public:
-			window() {}
-			~window();
+    class window
+    {
+        public:
+            window() {}
+            ~window();
 
-			void init();
-			void loop();
+            void init();
+            void loop();
 
-			void set_phase(phase* renderer, entity::ticker* ticker);
+            void set_phase(phase* renderer, entity::ticker* ticker);
 
-			std::unique_ptr<resource_loader> loader;
+            std::unique_ptr<resource_loader> loader;
 
-			std::unique_ptr<phase> current_renderer;
-			std::unique_ptr<entity::ticker> current_ticker;
+            std::unique_ptr<phase> current_renderer;
+            std::unique_ptr<entity::ticker> current_ticker;
 
-			GLFWwindow* win;
-			vk::UniqueInstance instance;
-			vk::UniqueSurfaceKHR surface;
-			
-			vk::PhysicalDevice physicalDevice;
+            GLFWwindow* win;
+            vk::UniqueInstance instance;
+            vk::UniqueSurfaceKHR surface;
 
-			vk::PhysicalDeviceProperties deviceProperties;
-			QueueFamilyIndices queueFamilyIndices;
-			SwapChainSupportDetails swapchainSupport;
+            vk::PhysicalDevice physicalDevice;
 
-			vk::UniqueDevice device;
-			vma::Allocator allocator;
+            vk::PhysicalDeviceProperties deviceProperties;
+            QueueFamilyIndices queueFamilyIndices;
+            SwapChainSupportDetails swapchainSupport;
 
-			vk::Queue graphicsQueue;
-			vk::Queue presentQueue;
-			std::vector<vk::Queue> transferQueues;
+            vk::UniqueDevice device;
+            vma::Allocator allocator;
 
-			vk::SurfaceFormatKHR swapchainFormat;
-			vk::PresentModeKHR swapchainPresentMode;
-			vk::Extent2D swapchainExtent;
-			uint32_t swapchainImageCount;
-			vk::UniqueSwapchainKHR swapchain;
+            vk::Queue graphicsQueue;
+            vk::Queue presentQueue;
+            std::vector<vk::Queue> transferQueues;
 
-			std::vector<vk::Image> swapchainImages;
-			std::vector<vk::UniqueImageView> swapchainImageViews;
-			std::vector<vk::ImageView> swapchainImageViewsRaw;
+            vk::SurfaceFormatKHR swapchainFormat;
+            vk::PresentModeKHR swapchainPresentMode;
+            vk::Extent2D swapchainExtent;
+            uint32_t swapchainImageCount;
+            vk::UniqueSwapchainKHR swapchain;
 
-			const int MAX_FRAMES_IN_FLIGHT = 2;
-			std::vector<vk::UniqueSemaphore> imageAvailableSemaphores;
-			std::vector<vk::UniqueSemaphore> renderFinishedSemaphores;
-			std::vector<vk::UniqueFence> fences;
+            std::vector<vk::Image> swapchainImages;
+            std::vector<vk::UniqueImageView> swapchainImageViews;
+            std::vector<vk::ImageView> swapchainImageViewsRaw;
 
-			std::vector<vk::Fence> imagesInFlight;
-			std::vector<vk::Fence> inFlightFences;
+            const int MAX_FRAMES_IN_FLIGHT = 2;
+            std::vector<vk::UniqueSemaphore> imageAvailableSemaphores;
+            std::vector<vk::UniqueSemaphore> renderFinishedSemaphores;
+            std::vector<vk::UniqueFence> fences;
 
-			decltype(std::chrono::high_resolution_clock::now()) lastFrame;
+            std::vector<vk::Fence> imagesInFlight;
+            std::vector<vk::Fence> inFlightFences;
 
-			static constexpr int fpsSampleRate = 10;
-			uint64_t framesInSecond;
-			decltype(std::chrono::high_resolution_clock::now()) lastFPS;
-			int fpsCount;
-			double currentFPS;
+            decltype(std::chrono::high_resolution_clock::now()) lastFrame;
+
+            static constexpr int fpsSampleRate = 10;
+            uint64_t framesInSecond;
+            decltype(std::chrono::high_resolution_clock::now()) lastFPS;
+            int fpsCount;
+            double currentFPS;
 
 #ifndef NDEBUG
-			vk::UniqueDebugUtilsMessengerEXT debugMessenger;
+            vk::UniqueDebugUtilsMessengerEXT debugMessenger;
 #endif
-		private:
-			void initWindow();
-			void initVulkan();
+        private:
+            void initWindow();
+            void initVulkan();
 
-			int rateDeviceSuitability(vk::PhysicalDevice phyDev);
-			QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice phyDev);
-			SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice phyDev);
-	};
+            int rateDeviceSuitability(vk::PhysicalDevice phyDev);
+            QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice phyDev);
+            SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice phyDev);
+    };
 }

@@ -8,31 +8,31 @@
 
 namespace render
 {
-	class window;
+    class window;
 
-	class phase
-	{
-		public:
-			phase(window*);
-			virtual ~phase();
+    class phase
+    {
+        public:
+            phase(window*);
+            virtual ~phase();
 
-			virtual void preload();
-			virtual void prepare(std::vector<vk::Image> swapchainImages, std::vector<vk::ImageView> swapchainViews);
-			virtual void init();
-			virtual void render(int frame, vk::Semaphore imageAvailable, vk::Semaphore renderFinished, vk::Fence fence);
+            virtual void preload();
+            virtual void prepare(std::vector<vk::Image> swapchainImages, std::vector<vk::ImageView> swapchainViews);
+            virtual void init();
+            virtual void render(int frame, vk::Semaphore imageAvailable, vk::Semaphore renderFinished, vk::Fence fence);
 
-			void waitLoad();
-		protected:
-			window* win;
+            void waitLoad();
+        protected:
+            window* win;
 
-			vk::Instance instance;
-			vk::Device device;
-			vma::Allocator allocator;
-			resource_loader* loader;
+            vk::Instance instance;
+            vk::Device device;
+            vma::Allocator allocator;
+            resource_loader* loader;
 
-			uint32_t graphicsFamily;
-			vk::Queue graphicsQueue;
+            uint32_t graphicsFamily;
+            vk::Queue graphicsQueue;
 
-			std::vector<std::shared_future<void>> loadingFutures;
-	};
+            std::vector<std::shared_future<void>> loadingFutures;
+    };
 }
