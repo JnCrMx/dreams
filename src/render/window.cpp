@@ -11,6 +11,7 @@
 
 #include <iterator>
 #include <map>
+#include <memory>
 #include <set>
 #include <stdexcept>
 
@@ -18,6 +19,8 @@ using namespace config;
 
 namespace render
 {
+    window::glfw_initializer window::glfw_init{};
+
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -59,8 +62,6 @@ namespace render
 
     void window::initWindow()
     {
-        glfwInit();
-
         GLFWmonitor* monitor = glfwGetPrimaryMonitor();
         const GLFWvidmode* mode = glfwGetVideoMode(monitor);
         const char* name = glfwGetMonitorName(monitor);
@@ -71,7 +72,7 @@ namespace render
         glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-        win = glfwCreateWindow(mode->width, mode->height, constants::displayname.c_str(), monitor, nullptr);
+        win = std::unique_ptr<GLFWwindow, glfw_window_deleter>(glfwCreateWindow(mode->width, mode->height, constants::displayname.c_str(), monitor, nullptr));
         spdlog::info("Created window ({}x{} @ {} Hz R{}G{}B{}) on monitor \"{}\"", mode->width, mode->height, mode->refreshRate,
             mode->redBits, mode->greenBits, mode->blueBits, name);
 
@@ -123,7 +124,7 @@ namespace render
 
         {
             vk::SurfaceKHR surface_;
-            glfwCreateWindowSurface(instance.get(), win, nullptr, reinterpret_cast<VkSurfaceKHR*>(&surface_));
+            glfwCreateWindowSurface(instance.get(), win.get(), nullptr, reinterpret_cast<VkSurfaceKHR*>(&surface_));
             vk::ObjectDestroy<vk::Instance, vk::DispatchLoaderDynamic> deleter(instance.get(), nullptr, VULKAN_HPP_DEFAULT_DISPATCHER);
             surface = vk::UniqueSurfaceKHR(surface_, deleter);
         }
@@ -354,7 +355,7 @@ namespace render
 
         int currentFrame = 0;
         vk::Result r;
-        while(!glfwWindowShouldClose(win))
+        while(!glfwWindowShouldClose(win.get()))
         {
             glfwPollEvents();
 
@@ -411,14 +412,12 @@ namespace render
 
     window::~window()
     {
+        device->waitIdle();
+
         current_renderer.reset();
         current_ticker.reset();
         loader.reset();
 
         allocator.destroy();
-
-        glfwDestroyWindow(win);
-        glfwTerminate();
-        spdlog::info("Destroyed window");
     }
 }

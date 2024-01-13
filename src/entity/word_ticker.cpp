@@ -14,7 +14,7 @@ namespace entity
     void world_ticker::init(render::window* win)
     {
         ticker::init(win);
-        glfwSetInputMode(win->win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(win->win.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
     void world_ticker::on_scroll(double x, double y)

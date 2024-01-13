@@ -50,7 +50,22 @@ namespace render
             std::unique_ptr<phase> current_renderer;
             std::unique_ptr<entity::ticker> current_ticker;
 
-            GLFWwindow* win;
+            struct glfw_initializer {
+                glfw_initializer() {
+                    glfwInit();
+                }
+                ~glfw_initializer() {
+                    glfwTerminate();
+                }
+            };
+            static glfw_initializer glfw_init;
+
+            struct glfw_window_deleter {
+                void operator()(GLFWwindow* ptr) const {
+                    glfwDestroyWindow(ptr);
+                }
+            };
+            std::unique_ptr<GLFWwindow, glfw_window_deleter> win;
             vk::UniqueInstance instance;
             vk::UniqueSurfaceKHR surface;
 
