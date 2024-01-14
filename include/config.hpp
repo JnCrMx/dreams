@@ -8,7 +8,7 @@ namespace config
     class config
     {
         public:
-            vk::PresentModeKHR preferredPresentMode = vk::PresentModeKHR::eMailbox; //aka VSync
+            vk::PresentModeKHR preferredPresentMode = vk::PresentModeKHR::eFifoRelaxed; //aka VSync
             vk::SampleCountFlagBits sampleCount = vk::SampleCountFlagBits::e2; // aka Anti-aliasing
             uint32_t shadowResolution = 2048;
     };

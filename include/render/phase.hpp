@@ -22,6 +22,8 @@ namespace render
             virtual void render(int frame, vk::Semaphore imageAvailable, vk::Semaphore renderFinished, vk::Fence fence);
 
             void waitLoad();
+
+            const vma::Allocator& get_allocator() const { return allocator; }
         protected:
             window* win;
 

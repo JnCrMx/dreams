@@ -18,10 +18,7 @@
 
 #include "entity/word_ticker.hpp"
 
-#include "config.hpp"
-
-#include <future>
-#include <thread>
+#include "utils.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -70,8 +67,16 @@ int main(int argc, char *argv[])
 
     render::phases::render_test* renderer;
     entity::world_ticker* ticker;
-    auto gui = [](render::gui_render_context& ctx){
+    auto gui = [&renderer, &window](render::gui_render_context& ctx){
         ctx.draw_text("Hello world!", 0.0, 0.0, 0.05f, glm::vec4(1.0, 1.0, 1.0, 1.0));
+        ctx.draw_text("Hello world!", 0.0, 2.0 - 0.05f, 0.05f, glm::vec4(1.0, 1.0, 1.0, 1.0));
+
+        ctx.draw_text("FPS: "+utils::to_fixed_string<1>(window.currentFPS), 0.05f, 0.05f + 0*0.05f, 0.05f);
+        if(const auto& allocator = renderer->get_allocator()) {
+            auto budget = allocator.getHeapBudgets().front();
+            auto usage = ((double)budget.usage) / ((double)budget.budget);
+            ctx.draw_text("VRAM: "+utils::to_fixed_string<1>(usage*100.0)+"%", 0.05f, 0.05f + 1*0.05f, 0.05f);
+        }
     };
 
     window.set_phase(renderer = new render::phases::render_test(&window, registry, gui), ticker = new entity::world_ticker(registry, soraka, camera));

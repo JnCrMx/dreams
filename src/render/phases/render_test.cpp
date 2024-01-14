@@ -5,7 +5,6 @@
 #include "render/utils.hpp"
 #include "render/debug.hpp"
 #include "config.hpp"
-#include "utils.hpp"
 #include "entity/components/renderable.hpp"
 #include "entity/components/rotation.hpp"
 
@@ -789,13 +788,8 @@ namespace render::phases
         if(guiRenderCallback) {
             guiRenderCallback(ctx);
         }
-
-        auto budget = allocator.getHeapBudgets().front();
-        auto usage = ((double)budget.usage) / ((double)budget.budget);
-
-        font->renderText(commandBuffer.get(), frame, "FPS: "+utils::to_fixed_string<1>(win->currentFPS), 0.05f, 0.05f + 0*0.05f, 0.05f);
-        font->renderText(commandBuffer.get(), frame, "VRAM: "+utils::to_fixed_string<1>(usage*100.0)+"%", 0.05f, 0.05f + 1*0.05f, 0.05f);
         font->finish(frame);
+
         commandBuffer->endRenderPass();
         commandBuffer->endDebugUtilsLabelEXT();
 
