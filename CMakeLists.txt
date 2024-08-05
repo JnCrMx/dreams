@@ -21,7 +21,7 @@ file(GLOB_RECURSE shaders shaders/*.vert shaders/*.frag)
 FetchContent_Declare(
   entt
   GIT_REPOSITORY https://github.com/skypjack/entt.git
-  GIT_TAG        v3.12.2
+  GIT_TAG        v3.13.2
 )
 FetchContent_Declare(
   libspng
@@ -31,7 +31,8 @@ FetchContent_Declare(
 FetchContent_Declare(
   VulkanMemoryAllocator-Hpp
   GIT_REPOSITORY https://github.com/YaaZ/VulkanMemoryAllocator-Hpp.git
-  GIT_TAG        master
+  GIT_TAG        73cdd838c425637c874d343ab0ceba5148189cbf
+  PATCH_COMMAND  patch --forward -i ${CMAKE_CURRENT_SOURCE_DIR}/VulkanMemoryAllocator-Hpp.patch || true
 )
 
 FetchContent_MakeAvailable(entt libspng VulkanMemoryAllocator-Hpp)
